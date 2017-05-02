@@ -1,20 +1,14 @@
-(* -*- tuareg -*- *)
-
-open StdLabels
-
-let commands =
-  [ "build"
-  ; "external-lib-deps"
-  ; "install"
-  ; "installed-libraries"
-  ; "runtest"
-  ; "uninstall"
-  ]
-
-let jbuild =
-  String.concat ~sep:""
-    ({|
 (jbuild_version 1)
+
+(use_meta_lang)
+
+(:let %{commands}
+ (build
+  external-lib-deps
+  install
+  installed-libraries
+  runtest
+  uninstall))
 
 (install
  ((section doc)
@@ -24,23 +18,16 @@ let jbuild =
  ((targets (jbuilder.1))
   (action  (with-stdout-to ${@}
             (run ${bin:jbuilder} --help=groff)))))
-|} :: List.map commands ~f:(fun cmd ->
-        Printf.sprintf {|
-(rule
- ((targets (jbuilder-%s.1))
-  (action  (with-stdout-to ${@}
-            (run ${bin:jbuilder} %s --help=groff)))))
-|} cmd cmd)
-  @ [ Printf.sprintf {|
+
+(:foreach %{cmd} %{commands}
+ (rule
+  ((targets (jbuilder-%{cmd}.1))
+   (action  (with-stdout-to ${@}
+             (run ${bin:jbuilder} %{cmd} --help=groff))))))
+
 (install
  ((section man)
   (files (
     jbuilder.1
-    %s
+    (:foreach %{cmd} %{commands} jbuilder-%{cmd}.1)
     ))))
-|} (String.concat ~sep:"\n    "
-      (List.map commands ~f:(Printf.sprintf "jbuilder-%s.1")))
-    ])
-
-let () =
-  Jbuild_plugin.V1.send jbuild

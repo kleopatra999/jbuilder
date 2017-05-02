@@ -5,17 +5,27 @@
 
 open Import
 
-type t
-val t : t Sexp.Of_sexp.t
-val sexp_of_t : t -> Sexp.t
+module type S = sig
+  type t
+  val t : t Sexp.Of_sexp.t
+  val sexp_of_t : t -> Sexp.t
 
-val of_string : string -> t
-val raw : string -> t
+  val of_string : string -> t
+  val raw : string -> t
 
-val just_a_var : t -> string option
+  val just_a_var : t -> string option
 
-val vars : t -> String_set.t
+  val vars : t -> String_set.t
 
-val fold : t -> init:'a -> f:('a -> string -> 'a) -> 'a
+  val fold : t -> init:'a -> f:('a -> string -> 'a) -> 'a
 
-val expand : t -> f:(string -> string option) -> string
+  val expand : t -> f:(string -> string option) -> string
+end
+
+module type Syntax = sig
+  val escape : char
+end
+
+module Make(Syntax : Syntax) : S
+
+include S

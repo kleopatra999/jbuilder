@@ -50,6 +50,10 @@ let code_error message vars =
               :: List.map vars ~f:(fun (name, value) ->
                 List [Atom name; value]))))
 
+let rec map_atoms t ~f =
+  match t with
+  | Atom s -> f s
+  | List l -> List (List.map l ~f:(map_atoms ~f))
 
 module Ast = struct
   type t =

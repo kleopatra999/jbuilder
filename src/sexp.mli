@@ -24,6 +24,8 @@ val to_string : t -> string
 
 val pp : Format.formatter -> t -> unit
 
+val map_atoms : t -> f:(string -> t) -> t
+
 module type Combinators = sig
   type 'a t
   val unit       : unit                      t

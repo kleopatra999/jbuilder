@@ -778,6 +778,7 @@ module Stanza = struct
       ; cstr "alias"       (Alias_conf.v1 @> nil)   (fun x -> [Alias       x])
       (* Just for validation and error messages *)
       ; cstr "jbuild_version" (Jbuild_version.t @> nil) (fun _ -> [])
+      ; cstr "use_meta_lang" nil []
       ]
 
   let select : Jbuild_version.t -> t list Sexp.Of_sexp.t = function
