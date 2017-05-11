@@ -5,8 +5,10 @@ val make : string -> dir:Path.t -> t
 val default : dir:Path.t -> t
 val runtest : dir:Path.t -> t
 val install : dir:Path.t -> t
+val doc     : dir:Path.t -> t
 
 val lib_cm_all : dir:Path.t -> string -> Cm_kind.t -> t
+val lib_odoc_all : dir:Path.t -> string -> t
 
 val dep : t -> ('a, 'a) Build.t
 val file : t -> Path.t

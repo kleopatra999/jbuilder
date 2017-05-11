@@ -44,14 +44,19 @@ let file_with_digest_suffix t ~digest =
 let default = make "DEFAULT"
 let runtest = make "runtest"
 let install = make "install"
+let doc     = make "doc"
 
 let lib_cm_all ~dir lib_name cm_kind =
   make (sprintf "%s%s-all" lib_name (Cm_kind.ext cm_kind)) ~dir
+
+let lib_odoc_all ~dir lib_name =
+  make (sprintf "%s.odoc-all" lib_name) ~dir
 
 let recursive_aliases =
   [ default
   ; runtest
   ; install
+  ; doc
   ]
 
 module Store = struct
